@@ -3,6 +3,7 @@ from . import models, schemas
 import random
 
 def get_item(db: Session, id: int):
+    print("DB HIT: get_item")
     return db.query(models.User).filter(models.User.id == id).first()
 
 def get_items(db: Session, skip: int = 0, limit: int = 10):
