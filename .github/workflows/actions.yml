@@ -61,7 +61,7 @@ jobs:
       run: |
         python -c "
         import httpx
-        r = httpx.get('http://localhost:3000/health')
+        r = httpx.get('http://localhost:3000/health/')
         print(r.status_code)
         assert r.status_code == 200
         print('API OK')
