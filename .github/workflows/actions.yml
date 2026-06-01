@@ -41,6 +41,12 @@ jobs:
         REDIS_URL: ${{ secrets.REDIS_URL }}
       run: docker compose up -d --build
 
+    - name: Wait for Postgres
+      run: |
+        until docker exec $(docker ps -qf "name=postgres") pg_isready -U postgres; do
+          sleep 2
+        done
+
     - name: Check container
       run: docker ps -a
     
