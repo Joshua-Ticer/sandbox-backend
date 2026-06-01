@@ -1,4 +1,6 @@
 from fastapi import FastAPI, Depends, HTTPException
+import time
+from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import Session
 from . import schemas, crud
 from .models import Base
@@ -8,20 +10,32 @@ from app.config import settings
 from app.cache import get_cache, set_cache, delete_cache
 
 app = FastAPI()
-Base.metadata.create_all(bind=engine)
+def wait_for_db(engine):
+    for _ in range(30):
+        try:
+            engine.connect()
+            return
+        except OperationalError:
+            time.sleep(1)
+    raise Exception("Database never became ready")
+
+@app.on_event("startup")
+def startup():
+    wait_for_db(engine)
+    Base.metadata.create_all(bind=engine)
 
 @app.post("/users/", response_model=schemas.UserResponse)
-def create_item(user: schemas.UserCreate, db: Session = Depends(get_db)):
+async def create_item(user: schemas.UserCreate, db: Session = Depends(get_db)):
     created = crud.create_item(db=db, item=user)
-    delete_cache("users:0:10")
+    await delete_cache("users:0:10")
     return created
 
 @app.post("/match/{user1_id}/{user2_id}")
-def match(user1_id: int, user2_id: int, db: Session = Depends(get_db)):
+async def match(user1_id: int, user2_id: int, db: Session = Depends(get_db)):
     try:
         simulated = crud.simulate_match(db, user1_id, user2_id)
-        delete_cache(f"user:{user1_id}")
-        delete_cache(f"user:{user2_id}")
+        await delete_cache(f"user:{user1_id}")
+        await delete_cache(f"user:{user2_id}")
         return simulated
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))

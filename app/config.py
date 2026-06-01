@@ -5,6 +5,9 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 class Settings(BaseSettings):
+    POSTGRES_USER: str
+    POSTGRES_PASSWORD: str
+    POSTGRES_DB: str
     DATABASE_URL: str
     REDIS_URL: str
 
@@ -13,4 +16,7 @@ class Settings(BaseSettings):
     )
 
 settings = Settings()
+
+from dotenv import load_dotenv
+load_dotenv()
 
