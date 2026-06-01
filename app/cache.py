@@ -1,6 +1,7 @@
 import json
 from app.redis import redis_client
 
+
 async def get_cache(key: str, ttl: int = 300):
     print("CACHE GET:", key)
     value = await redis_client.get(key)
@@ -11,11 +12,7 @@ async def get_cache(key: str, ttl: int = 300):
 
 async def set_cache(key: str, value, ttl: int = 300):
     print("CACHE SET:", key, value)
-    await redis_client.set(
-        key,
-        json.dumps(value),
-        ex=ttl
-    )
+    await redis_client.set(key, json.dumps(value), ex=ttl)
 
 
 async def delete_cache(key: str):

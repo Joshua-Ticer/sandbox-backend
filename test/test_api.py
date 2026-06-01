@@ -27,17 +27,9 @@ def test_create_user(monkeypatch):
         "elo": 1200,
     }
 
-    monkeypatch.setattr(
-        crud,
-        "create_item",
-        lambda db, item: created_user
-    )
+    monkeypatch.setattr(crud, "create_item", lambda db, item: created_user)
 
-    monkeypatch.setattr(
-        main,
-        "delete_cache",
-        AsyncMock()
-    )
+    monkeypatch.setattr(main, "delete_cache", AsyncMock())
 
     response = client.post(
         "/users/",
@@ -45,7 +37,7 @@ def test_create_user(monkeypatch):
             "name": "Josh",
             "age": 25,
             "elo": 1200,
-        }
+        },
     )
 
     assert response.status_code == 200
@@ -81,11 +73,7 @@ def test_get_user_cache_hit(monkeypatch):
         "elo": 1200,
     }
 
-    monkeypatch.setattr(
-        main,
-        "get_cache",
-        AsyncMock(return_value=cached_user)
-    )
+    monkeypatch.setattr(main, "get_cache", AsyncMock(return_value=cached_user))
 
     response = client.get("/users/1")
 
@@ -104,23 +92,11 @@ def test_get_user_cache_miss(monkeypatch):
         "elo": 1200,
     }
 
-    monkeypatch.setattr(
-        main,
-        "get_cache",
-        AsyncMock(return_value=None)
-    )
+    monkeypatch.setattr(main, "get_cache", AsyncMock(return_value=None))
 
-    monkeypatch.setattr(
-        main,
-        "set_cache",
-        AsyncMock()
-    )
+    monkeypatch.setattr(main, "set_cache", AsyncMock())
 
-    monkeypatch.setattr(
-        crud,
-        "get_item",
-        lambda db, id: user
-    )
+    monkeypatch.setattr(crud, "get_item", lambda db, id: user)
 
     response = client.get("/users/1")
 
@@ -133,19 +109,10 @@ def test_match_success(monkeypatch):
     from app import main
 
     monkeypatch.setattr(
-        crud,
-        "simulate_match",
-        lambda db, u1, u2: {
-            "winner": u1,
-            "loser": u2
-        }
+        crud, "simulate_match", lambda db, u1, u2: {"winner": u1, "loser": u2}
     )
 
-    monkeypatch.setattr(
-        main,
-        "delete_cache",
-        AsyncMock()
-    )
+    monkeypatch.setattr(main, "delete_cache", AsyncMock())
 
     response = client.post("/match/1/2")
 
@@ -163,11 +130,7 @@ def test_match_failure(monkeypatch):
     def fake_match(db, u1, u2):
         raise ValueError("Invalid user")
 
-    monkeypatch.setattr(
-        crud,
-        "simulate_match",
-        fake_match
-    )
+    monkeypatch.setattr(crud, "simulate_match", fake_match)
 
     response = client.post("/match/1/2")
 
