@@ -30,12 +30,17 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install pylint black httpx
+    - name: Start services
+      run: docker compose up --build -d
     - name: Checking code formatting with Black
       run: | 
         black --check .
     - name: Analysing the code with pylint
       run: |
         pylint $(git ls-files '*.py')
+    - name: Shutdown services
+      if: always()
+      run: docker compose down -v
 
 
   test:
