@@ -35,13 +35,20 @@ jobs:
         pylint $(git ls-files '*.py')
 
   test:
-    runs-on: ubuntu-latest
+  runs-on: ubuntu-latest
 
-    env:
-      DATABASE_URL: sqlite:///./test.db
-      ENV: test
+  services:
+    redis:
+      image: redis:7
+      ports:
+        - 6379:6379
 
-    steps:
+  env:
+    DATABASE_URL: sqlite:///./test.db
+    ENV: test
+    REDIS_URL: redis://localhost:6379/0
+
+  steps:
       - name: Checkout repo
         uses: actions/checkout@v4
 
