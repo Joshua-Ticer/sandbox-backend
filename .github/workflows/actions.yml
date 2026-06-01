@@ -41,14 +41,14 @@ jobs:
         echo "REDIS_URL=${{ secrets.REDIS_URL }}" >> .env
 
     - name: Start services
-      run: docker compose up --build -d
+      run: docker compose up --build
 
     - name: Checking code formatting with Black
       run: | 
         black --check .
 
-    - name: Show API logs
-      run: docker compose logs api
+    - name: Check container
+      run: docker ps -a
 
     - name: Analysing the code with pylint
       run: |
