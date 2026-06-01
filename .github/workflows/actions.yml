@@ -47,6 +47,9 @@ jobs:
       run: | 
         black --check .
 
+    - name: Show API logs
+      run: docker compose logs api
+
     - name: Analysing the code with pylint
       run: |
         pylint $(git ls-files '*.py')
