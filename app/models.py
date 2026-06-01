@@ -8,5 +8,3 @@ class User(Base):
     name = Column(String)
     age = Column(Integer)
     elo = Column(Integer)
-
-    

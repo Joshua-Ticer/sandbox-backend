@@ -36,7 +36,6 @@ jobs:
     - name: Debug env
       run: |
         echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD}}"
-        echo "POSTGRES_PASSWORD=$POSTGRES_PASSWORD"
         env | grep POSTGRES || true
 
     - name: Start services
