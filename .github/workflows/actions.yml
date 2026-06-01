@@ -42,13 +42,11 @@ jobs:
 
     - name: Start services
       run: docker compose up --build -d
-      env_file:
-        .env
 
     - name: Checking code formatting with Black
       run: | 
         black --check .
-        
+
     - name: Analysing the code with pylint
       run: |
         pylint $(git ls-files '*.py')
