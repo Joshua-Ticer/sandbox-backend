@@ -49,13 +49,23 @@ jobs:
 
     - name: Wait for Postgres
       run: |
-        sleep 10
+        sleep 3
 
     - name: Check container
       run: docker ps -a
     
     - name: Check logs
       run: docker compose logs postgres
+
+    - name: Integration test with Health endpoint
+      run: |
+        pip install httpx
+        python -c "
+        import httpx
+        r = httpx.get('http://localhost:3000/health')
+        assert r.status_code == 200
+        print('API OK')
+        "
 
     - name: Checking code formatting with Black
       run: | 
