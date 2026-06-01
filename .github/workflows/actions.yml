@@ -32,9 +32,9 @@ jobs:
         pip install pylint black httpx
     - name: Start services
       run: docker compose up --build -d
-           docker compose logs -f api
-           docker compose logs postgres
-           docker compose logs redis
+          docker compose logs -f api
+          docker compose logs postgres
+          docker compose logs redis
       env:
         POSTGRES_USER: ${{secrets.POSTGRES_USER}}
         POSTGRES_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
@@ -47,9 +47,6 @@ jobs:
     - name: Analysing the code with pylint
       run: |
         pylint $(git ls-files '*.py')
-    - name: Shutdown services
-      if: always()
-      run: docker compose down -v
 
 
   test:
