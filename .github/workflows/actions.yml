@@ -41,14 +41,7 @@ jobs:
         echo "REDIS_URL=${{ secrets.REDIS_URL }}" >> .env
 
     - name: Start services
-      run: |
-        export POSTGRES_USER=${{ secrets.POSTGRES_USER }}
-        export POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
-        export POSTGRES_DB=${{ secrets.POSTGRES_DB }}
-        export DATABASE_URL=${{ secrets.DATABASE_URL }}
-        export REDIS_URL=${{ secrets.REDIS_URL }}
-
-        docker compose up --build 
+      run: docker compose up --build -d
 
     - name: Check container
       run: docker ps -a
