@@ -46,7 +46,7 @@ jobs:
     - name: Check container
       run: docker ps -a
     
-    - name: Check container
+    - name: Check logs
       run: docker compose logs postgres
 
     - name: Checking code formatting with Black
