@@ -32,16 +32,14 @@ jobs:
         python -m pip install --upgrade pip
         pip install pylint black httpx
 
-    - name: Create .env file
-      run: |
-        echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
-        echo "POSTGRES_USER=${{ secrets.POSTGRES_USER }}" >> .env
-        echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> .env
-        echo "POSTGRES_DB=${{ secrets.POSTGRES_DB }}" >> .env
-        echo "REDIS_URL=${{ secrets.REDIS_URL }}" >> .env
-
     - name: Start services
-      run: docker compose up --build -d
+      env:
+        POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+        POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+        POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        REDIS_URL: ${{ secrets.REDIS_URL }}
+      run: docker compose up -d --build
 
     - name: Check container
       run: docker ps -a
