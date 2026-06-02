@@ -216,6 +216,11 @@ jobs:
           REDIS_URL: ${{ secrets.REDIS_URL }}
         run: |
           docker compose up -d
+      
+      - name: Show logs
+        run: | 
+          docker ps -a
+          docker compose logs api
 
       - name: Verify deployment
         run: |

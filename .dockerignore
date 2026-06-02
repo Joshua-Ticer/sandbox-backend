@@ -1,0 +1,8 @@
+actions-runner/
+.github/
+node_modules/
+venv/
+.env
+dist/
+build/
+__pycache__/
