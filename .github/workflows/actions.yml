@@ -84,7 +84,7 @@ jobs:
       run: docker compose logs postgres
 
     - name: List images
-      run: docker images
+      run: docker compose images
     
 
   unit-test:
