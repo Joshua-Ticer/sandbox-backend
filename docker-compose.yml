@@ -1,5 +1,6 @@
 services:
   api:
+    image: backend-api:latest
     build: .
     ports:
       - "3000:8000"

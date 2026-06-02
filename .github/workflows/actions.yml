@@ -80,11 +80,15 @@ jobs:
     - name: Check container
       run: docker ps -a
     
-    - name: Check logs
-      run: docker compose logs postgres
+    - name: Save image
+      run: |
+        docker save backend-api:latest -o backend-api.tar
 
-    - name: List images
-      run: docker compose images
+    - name: Upload image artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: backend-api-image
+        path: backend-api.tar
     
 
   unit-test:
@@ -141,6 +145,15 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install pytest httpx
+      
+      - name: Download image artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: backend-api-image
+
+      - name: Load image
+        run: |
+          docker load -i backend-api.tar
 
       - name: Start services
         env:
@@ -150,7 +163,7 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           REDIS_URL: ${{ secrets.REDIS_URL }}
         run: |
-          docker compose up -d --build
+          docker compose up -d 
 
       - name: Wait for API
         run: |
