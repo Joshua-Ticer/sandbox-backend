@@ -30,9 +30,7 @@ def test_create_and_get_user():
 
     user_id = created["id"]
 
-    get_response = httpx.get(
-        f"{BASE_URL}/users/{user_id}"
-    )
+    get_response = httpx.get(f"{BASE_URL}/users/{user_id}")
 
     assert get_response.status_code == 200
 
@@ -45,9 +43,7 @@ def test_create_and_get_user():
 
 
 def test_get_missing_user():
-    response = httpx.get(
-        f"{BASE_URL}/users/999999"
-    )
+    response = httpx.get(f"{BASE_URL}/users/999999")
 
     assert response.status_code == 404
 
@@ -62,9 +58,7 @@ def test_list_users():
         },
     )
 
-    response = httpx.get(
-        f"{BASE_URL}/users/"
-    )
+    response = httpx.get(f"{BASE_URL}/users/")
 
     assert response.status_code == 200
 
@@ -93,37 +87,22 @@ def test_match_updates_elo():
         },
     ).json()
 
-    before1 = httpx.get(
-        f"{BASE_URL}/users/{user1['id']}"
-    ).json()
+    before1 = httpx.get(f"{BASE_URL}/users/{user1['id']}").json()
 
-    before2 = httpx.get(
-        f"{BASE_URL}/users/{user2['id']}"
-    ).json()
+    before2 = httpx.get(f"{BASE_URL}/users/{user2['id']}").json()
 
-    match_response = httpx.post(
-        f"{BASE_URL}/match/{user1['id']}/{user2['id']}"
-    )
+    match_response = httpx.post(f"{BASE_URL}/match/{user1['id']}/{user2['id']}")
 
     assert match_response.status_code == 200
 
-    after1 = httpx.get(
-        f"{BASE_URL}/users/{user1['id']}"
-    ).json()
+    after1 = httpx.get(f"{BASE_URL}/users/{user1['id']}").json()
 
-    after2 = httpx.get(
-        f"{BASE_URL}/users/{user2['id']}"
-    ).json()
+    after2 = httpx.get(f"{BASE_URL}/users/{user2['id']}").json()
 
-    assert (
-        after1["elo"] != before1["elo"]
-        or after2["elo"] != before2["elo"]
-    )
+    assert after1["elo"] != before1["elo"] or after2["elo"] != before2["elo"]
 
 
 def test_match_invalid_users():
-    response = httpx.post(
-        f"{BASE_URL}/match/99999/88888"
-    )
+    response = httpx.post(f"{BASE_URL}/match/99999/88888")
 
     assert response.status_code == 400
