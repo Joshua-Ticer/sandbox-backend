@@ -4,7 +4,6 @@ from app.main import app
 from app import crud
 from app import main
 
-
 client = TestClient(app)
 
 
