@@ -24,9 +24,10 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
+        cache: 'pip'
 
     - name: Install dependencies
       run: |
@@ -57,7 +58,8 @@ jobs:
     - name: Check logs
       run: docker compose logs postgres
 
-    - name: Integration test with Health endpoint
+    - name: Integration test
+      needs: [test]
       run: |
         python -c "
         import httpx

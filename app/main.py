@@ -6,7 +6,6 @@ from . import schemas, crud
 from .models import Base
 from datetime import datetime
 from .database import engine, get_db
-from app.config import settings
 from app.cache import get_cache, set_cache, delete_cache
 
 app = FastAPI()
