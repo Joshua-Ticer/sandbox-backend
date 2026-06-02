@@ -14,7 +14,7 @@ class Settings(BaseSettings):
 
     ENV: str = "dev"
 
-    model_config = SettingsConfigDict(env_file=BASE_DIR / "project.env", extra="ignore")
+    model_config = SettingsConfigDict(env_file=BASE_DIR / ".env", extra="ignore")
 
 
 settings = Settings()
