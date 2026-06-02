@@ -1,6 +1,8 @@
 fastapi
 uvicorn[standard]
 sqlalchemy
+sqlalchemy.orm
+sqlalchemy.exc
 pydantic
 redis
 psycopg2-binary

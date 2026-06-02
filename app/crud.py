@@ -1,6 +1,6 @@
+import random
 from sqlalchemy.orm import Session
 from . import models, schemas
-import random
 
 
 def get_item(db: Session, id: int):
@@ -25,7 +25,7 @@ def expected_score(elo_a: int, elo_b: int) -> float:
 
 
 def simulate_match(db: Session, user1_id: int, user2_id: int):
-    K = 32  # standard ELO constant
+    k_score = 32  # standard ELO constant
     user1 = db.query(models.User).filter(models.User.id == user1_id).first()
     user2 = db.query(models.User).filter(models.User.id == user2_id).first()
 
@@ -44,8 +44,8 @@ def simulate_match(db: Session, user1_id: int, user2_id: int):
         score1, score2 = 0, 1
 
     # elo updates
-    user1.elo = round(user1.elo + K * (score1 - exp1))
-    user2.elo = round(user2.elo + K * (score2 - exp2))
+    user1.elo = round(user1.elo + k_score * (score1 - exp1))
+    user2.elo = round(user2.elo + k_score * (score2 - exp2))
 
     db.commit()
     db.refresh(user1)

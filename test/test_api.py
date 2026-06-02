@@ -1,7 +1,9 @@
 from fastapi.testclient import TestClient
 from unittest.mock import AsyncMock
-
 from app.main import app
+from app import crud
+from app import main
+
 
 client = TestClient(app)
 
@@ -17,9 +19,6 @@ def test_health():
 
 
 def test_create_user(monkeypatch):
-    from app import crud
-    from app import main
-
     created_user = {
         "id": 1,
         "name": "Josh",
@@ -51,8 +50,6 @@ def test_create_user(monkeypatch):
 
 
 def test_get_user_not_found(monkeypatch):
-    from app import crud
-    from app import main
 
     monkeypatch.setattr(main, "get_cache", AsyncMock(return_value=None))
     monkeypatch.setattr(crud, "get_item", lambda db, id: None)
@@ -64,7 +61,6 @@ def test_get_user_not_found(monkeypatch):
 
 
 def test_get_user_cache_hit(monkeypatch):
-    from app import main
 
     cached_user = {
         "id": 1,
@@ -82,9 +78,6 @@ def test_get_user_cache_hit(monkeypatch):
 
 
 def test_get_user_cache_miss(monkeypatch):
-    from app import crud
-    from app import main
-
     user = {
         "id": 1,
         "name": "Josh",
@@ -105,9 +98,6 @@ def test_get_user_cache_miss(monkeypatch):
 
 
 def test_match_success(monkeypatch):
-    from app import crud
-    from app import main
-
     monkeypatch.setattr(
         crud, "simulate_match", lambda db, u1, u2: {"winner": u1, "loser": u2}
     )
@@ -125,8 +115,6 @@ def test_match_success(monkeypatch):
 
 
 def test_match_failure(monkeypatch):
-    from app import crud
-
     def fake_match(db, u1, u2):
         raise ValueError("Invalid user")
 
