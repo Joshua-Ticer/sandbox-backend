@@ -169,7 +169,7 @@ jobs:
 
       - name: Run integration tests
         run: |
-          pytest test/integration -v
+          pytest test/integration/integration-test.py -v
 
       - name: Show logs on failure
         if: failure()
