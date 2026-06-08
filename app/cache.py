@@ -2,7 +2,6 @@ import json
 from app.redis import redis_client
 
 
-
 async def get_cache(key: str):
     print("CACHE GET:", key)
     value = await redis_client.get(key)
