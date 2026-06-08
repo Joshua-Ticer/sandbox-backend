@@ -9,13 +9,16 @@ from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import Session
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     wait_for_db(engine)
     Base.metadata.create_all(bind=engine)
     yield
 
+
 app = FastAPI(lifespan=lifespan)
+
 
 def wait_for_db(engine):
     for _ in range(30):
