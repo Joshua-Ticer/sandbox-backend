@@ -3,7 +3,7 @@ services:
     image: backend-api:latest
     build: .
     ports:
-      - "3000:8000"
+      - "8000:8000"
     environment:
       DATABASE_URL: ${DATABASE_URL}
       REDIS_URL: ${REDIS_URL}

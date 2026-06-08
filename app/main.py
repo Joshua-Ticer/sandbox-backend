@@ -1,4 +1,5 @@
 import time
+from contextlib import asynccontextmanager
 from . import schemas, crud
 from .models import Base
 from datetime import datetime
@@ -8,8 +9,13 @@ from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import Session
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    wait_for_db(engine)
+    Base.metadata.create_all(bind=engine)
+    yield
 
+app = FastAPI(lifespan=lifespan)
 
 def wait_for_db(engine):
     for _ in range(30):
@@ -19,12 +25,6 @@ def wait_for_db(engine):
         except OperationalError:
             time.sleep(1)
     raise Exception("Database never became ready")
-
-
-@app.on_event("startup")
-def startup():
-    wait_for_db(engine)
-    Base.metadata.create_all(bind=engine)
 
 
 @app.post("/users/", response_model=schemas.UserResponse)
