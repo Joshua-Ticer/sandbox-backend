@@ -3,7 +3,6 @@ import httpx
 BASE_URL = "http://localhost:8000"
 
 
-
 def test_health():
     response = httpx.get(f"{BASE_URL}/health/")
 

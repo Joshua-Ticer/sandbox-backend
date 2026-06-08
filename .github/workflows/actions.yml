@@ -37,6 +37,11 @@ jobs:
       - name: Checking code formatting with Black
         run: | 
           black --check .
+      
+      - name: Reformat on failure
+        if: failure()
+        run: |
+          black .
 
       - name: Analysing the code with pylint
         run: |
